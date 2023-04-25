@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+protocol ParamProtocol {
+    func getPath() -> String
+    func getQueryParam() -> [(String, String)]
+}

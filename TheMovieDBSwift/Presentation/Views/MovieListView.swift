@@ -8,13 +8,36 @@
 import SwiftUI
 
 struct MovieListView: View {
+    @StateObject var viewModel: MovieListViewModel
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            VStack {
+                if let errorMessage = viewModel.errorMessage {
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .padding()
+                }
+                if viewModel.isLoading {
+                    ProgressView()
+                } else {
+                    List(viewModel.movies) { movie in
+                        NavigationLink(destination: MovieDetailView(viewModel: MovieDetailViewModel(movieID: movie.id))) {
+                            MovieListRowView(movie: movie)
+                        }
+                    }
+                }
+            }
+            .navigationBarTitle(Text("Popular Movies"))
+            .task {
+                    await viewModel.fetchMovies()
+
+            }
+        }
     }
 }
 
 struct MovieListView_Previews: PreviewProvider {
     static var previews: some View {
-        MovieListView()
+        MovieListView(viewModel: MovieListViewModel())
     }
 }

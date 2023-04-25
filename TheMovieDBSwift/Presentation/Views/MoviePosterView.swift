@@ -8,13 +8,30 @@
 import SwiftUI
 
 struct MoviePosterView: View {
+    let posterURL: URL?
+    
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        AsyncImage(url: posterURL) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .cornerRadius(8)
+        } placeholder: {
+            Rectangle()
+                .fill(Color.gray.opacity(0.5))
+                .cornerRadius(8)
+            Image(systemName: "film")
+                .resizable()
+                .foregroundColor(.white)
+                .frame(width: 30, height: 30)
+        }.frame(width: 75, height: 100)
+        
     }
 }
 
 struct MoviePosterView_Previews: PreviewProvider {
     static var previews: some View {
-        MoviePosterView()
+        MoviePosterView(posterURL: Movie.example().posterURL)
     }
 }
